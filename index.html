@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League Pro eFootball</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#34D399',
+                        accent: '#F59E0B',
+                        light: '#FFFFFF',
+                        dark: '#181818',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Animações e estilos personalizados */
+        .slide-in {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Estilo para tabelas de torneios */
+        .tournament-table th,
+        .tournament-table td {
+            padding: 0.75rem;
+            text-align: center;
+        }
+        
+        .tournament-table tr:nth-child(even) {
+            background-color: rgba(93, 92, 222, 0.1);
+        }
+        
+        /* Componente de progresso do carregamento */
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, #5D5CDE, #34D399);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            animation: loadingAnimation 1.5s infinite ease-in-out;
+        }
+        
+        @keyframes loadingAnimation {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Dark/Light Mode */
+        .dark {
+            color-scheme: dark;
+        }
+        
+        :root {
+            --color-bg: #FFFFFF;
+            --color-text: #181818;
+            --color-card: #F3F4F6;
+            --color-card-border: #E5E7EB;
+        }
+        
+        .dark:root {
+            --color-bg: #181818;
+            --color-text: #E5E7EB;
+            --color-card: #262626;
+            --color-card-border: #404040;
+        }
+        
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div id="loading-bar" class="loading-bar hidden"></div>
+    
+    <!-- Header Navigation -->
+    <header class="sticky top-0 bg-white dark:bg-dark shadow-md z-40">
+        <nav class="container mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center">
+                <button id="menu-toggle" class="lg:hidden mr-4 text-primary dark:text-primary">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+                <a href="#" class="text-xl font-bold text-primary dark:text-primary flex items-center" data-page="home">
+                    <i class="fas fa-futbol mr-2"></i>
+                    <span>League Pro eFootball</span>
+                </a>
+            </div>
+            
+            <div id="mobile-menu" class="hidden lg:flex w-full lg:w-auto mt-4 lg:mt-0">
+                <ul class="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-6">
+                    <li><a href="#" class="nav-link font-medium hover:text-primary dark:hover:text-primary" data-page="home">Início</a></li>
+                    <li><a href="#" class="nav-link font-medium hover:text-primary dark:hover:text-primary" data-page="tournaments">Torneios</a></li>
+                    <li><a href="#" class="nav-link font-medium hover:text-primary dark:hover:text-primary" data-page="teams">Times</a></li>
+                    <li><a href="#" class="nav-link font-medium hover:text-primary dark:hover:text-primary" data-page="paid">Campeonatos Pagos</a></li>
+                    <li><a href="#" class="nav-link font-medium hover:text-primary dark:hover:text-primary" data-page="news">Notícias</a></li>
+                </ul>
+            </div>
+            
+            <div class="flex items-center">
+                <button id="theme-toggle" class="p-2 text-primary dark:text-primary">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:block"></i>
+                </button>
+                <a href="#" class="ml-4 bg-primary text-white dark:bg-primary dark:text-white px-4 py-2 rounded hover:bg-opacity-90 transition-all" data-page="login">
+                    <i class="fas fa-sign-in-alt mr-1"></i> Login
+                </a>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Main Content Area -->
+    <main id="page-content" class="container mx-auto px-4 py-6 min-h-[calc(100vh-180px)]">
+        <!-- Content will be loaded here via JavaScript -->
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-100 dark:bg-gray-900 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-between">
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4 text-primary dark:text-primary">League Pro eFootball</h3>
+                    <p class="mb-4">O melhor campeonato online de eFootball do Brasil.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-primary dark:text-primary hover:text-opacity-80"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-primary dark:text-primary hover:text-opacity-80"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-primary dark:text-primary hover:text-opacity-80"><i class="fab fa-youtube text-xl"></i></a>
+                        <a href="#" class="text-primary dark:text-primary hover:text-opacity-80"><i class="fab fa-discord text-xl"></i></a>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-lg font-semibold mb-4">Links Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-primary dark:hover:text-primary" data-page="home">Início</a></li>
+                        <li><a href="#" class="hover:text-primary dark:hover:text-primary" data-page="tournaments">Torneios</a></li>
+                        <li><a href="#" class="hover:text-primary dark:hover:text-primary" data-page="teams">Escolha de Times</a></li>
+                        <li><a href="#" class="hover:text-primary dark:hover:text-primary" data-page="rules">Regras</a></li>
+                    </ul>
+                </div>
+                
+                <div class="w-full md:w-1/3">
+                    <h3 class="text-lg font-semibold mb-4">Contato</h3>
+                    <ul class="space-y-2">
+                        <li><i class="fas fa-envelope mr-2 text-primary dark:text-primary"></i> contato@leagueproefootball.com</li>
+                        <li><i class="fab fa-whatsapp mr-2 text-primary dark:text-primary"></i> (11) 98765-4321</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700 text-center">
+                <p>© 2023 League Pro eFootball. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Verificar modo escuro preferido
+        function setThemePreference() {
+            if (localStorage.theme === 'dark' || 
+                (!('theme' in localStorage) && 
+                window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        
+        // Alternar modo escuro/claro
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+        
+        // Dados de exemplo para o site
+        const siteData = {
+            tournaments: [
+                { 
+                    id: 1, 
+                    name: 'Copa Elite', 
+                    status: 'Em andamento', 
+                    totalTeams: 16,
+                    registeredTeams: 12,
+                    startDate: '10/10/2023',
+                    endDate: '15/12/2023',
+                    prize: 'R$ 2.000,00',
+                    isPaid: true,
+                    price: 'R$ 50,00',
+                    description: 'Campeonato principal da temporada com os melhores jogadores do Brasil.'
+                },
+                { 
+                    id: 2, 
+                    name: 'Liga Iniciantes', 
+                    status: 'Inscrições abertas', 
+                    totalTeams: 32,
+                    registeredTeams: 18,
+                    startDate: '20/10/2023',
+                    endDate: '20/01/2024',
+                    prize: 'R$ 1.000,00',
+                    isPaid: false,
+                    price: 'Gratuito',
+                    description: 'Liga para jogadores iniciantes que querem desenvolver suas habilidades.'
+                },
+                { 
+                    id: 3, 
+                    name: 'Torneio Relâmpago', 
+                    status: 'Inscrições abertas', 
+                    totalTeams: 8,
+                    registeredTeams: 4,
+                    startDate: '05/11/2023',
+                    endDate: '06/11/2023',
+                    prize: 'R$ 500,00',
+                    isPaid: true,
+                    price: 'R$ 25,00',
+                    description: 'Torneio rápido de fim de semana com duração de apenas 2 dias.'
+                },
+                { 
+                    id: 4, 
+                    name: 'Copa Masters', 
+                    status: 'Em breve', 
+                    totalTeams: 24,
+                    registeredTeams: 0,
+                    startDate: '01/12/2023',
+                    endDate: '15/02/2024',
+                    prize: 'R$ 3.000,00',
+                    isPaid: true,
+                    price: 'R$ 75,00',
+                    description: 'Torneio de elite com os maiores prêmios da temporada.'
+                }
+            ],
+            teams: [
+                { id: 1, name: 'Flamengo', logo: '🔴⚫', available: true },
+                { id: 2, name: 'Palmeiras', logo: '🟢⚪', available: true },
+                { id: 3, name: 'Santos', logo: '⚪⚫', available: false },
+                { id: 4, name: 'São Paulo', logo: '🔴⚪⚫', available: true },
+                { id: 5, name: 'Corinthians', logo: '⚪⚫', available: false },
+                { id: 6, name: 'Grêmio', logo: '🔵⚪⚫', available: true },
+                { id: 7, name: 'Internacional', logo: '🔴⚪', available: true },
+                { id: 8, name: 'Cruzeiro', logo: '🔵⚪', available: true },
+                { id: 9, name: 'Fluminense', logo: '🟢🔴⚪', available: true },
+                { id: 10, name: 'Botafogo', logo: '⚫⚪', available: true },
+                { id: 11, name: 'Vasco', logo: '⚫⚪', available: false },
+                { id: 12, name: 'Atlético Mineiro', logo: '⚫⚪', available: true },
+                { id: 13, name: 'Athletico Paranaense', logo: '🔴⚫', available: true },
+                { id: 14, name: 'Fortaleza', logo: '🔵🔴⚪', available: true },
+                { id: 15, name: 'Ceará', logo: '⚫⚪', available: true },
+                { id: 16, name: 'Bahia', logo: '🔵🔴⚪', available: true }
+            ],
+            news: [
+                {
+                    id: 1,
+                    title: 'Começa a Copa Elite 2023',
+                    date: '10/10/2023',
+                    summary: 'A maior competição de eFootball do Brasil começa com grandes jogos e surpresas.',
+                    content: 'A Copa Elite 2023 começou nesta semana com 16 dos melhores jogadores do Brasil disputando o título e o prêmio de R$ 2.000,00. Na primeira rodada já tivemos grandes surpresas com a derrota do atual campeão João "Maestro" Silva para o estreante Pedro "NextLevel" Ferreira por 3x1.',
+                    image: 'tournament'
+                },
+                {
+                    id: 2,
+                    title: 'Liga Iniciantes bate recorde de inscrições',
+                    date: '05/10/2023',
+                    summary: 'Com mais de 18 jogadores inscritos, a Liga Iniciantes promete ser a maior da história.',
+                    content: 'A Liga Iniciantes de 2023 já conta com 18 jogadores inscritos, um recorde para a categoria que visa desenvolver novos talentos do eFootball. As inscrições seguem abertas até o dia 15/10 e a expectativa é de que todos os 32 slots sejam preenchidos.',
+                    image: 'players'
+                },
+                {
+                    id: 3,
+                    title: 'Mudanças no regulamento para 2024',
+                    date: '01/10/2023',
+                    summary: 'League Pro anuncia mudanças importantes no regulamento para a próxima temporada.',
+                    content: 'A direção da League Pro eFootball anunciou mudanças significativas para a temporada 2024. Entre as novidades estão o aumento do número de competições, novas regras de escolha de times e um sistema de divisões para classificar os jogadores por nível de habilidade.',
+                    image: 'rules'
+                }
+            ],
+            tables: {
+                copaElite: [
+                    { pos: 1, team: 'Flamengo', player: 'Pedro "NextLevel"', p: 3, w: 3, d: 0, l: 0, gf: 10, ga: 2, gd: 8, pts: 9 },
+                    { pos: 2, team: 'Palmeiras', player: 'Carlos "Verdão"', p: 3, w: 2, d: 1, l: 0, gf: 7, ga: 3, gd: 4, pts: 7 },
+                    { pos: 3, team: 'São Paulo', player: 'Lucas "Tricolor"', p: 3, w: 2, d: 0, l: 1, gf: 6, ga: 4, gd: 2, pts: 6 },
+                    { pos: 4, team: 'Cruzeiro', player: 'Marcos "Raposa"', p: 3, w: 1, d: 2, l: 0, gf: 5, ga: 3, gd: 2, pts: 5 },
+                    { pos: 5, team: 'Botafogo', player: 'João "Glorioso"', p: 3, w: 1, d: 1, l: 1, gf: 4, ga: 4, gd: 0, pts: 4 },
+                    { pos: 6, team: 'Athletico', player: 'Felipe "Furacão"', p: 3, w: 1, d: 1, l: 1, gf: 3, ga: 3, gd: 0, pts: 4 },
+                    { pos: 7, team: 'Grêmio', player: 'André "Imortal"', p: 3, w: 1, d: 0, l: 2, gf: 3, ga: 6, gd: -3, pts: 3 },
+                    { pos: 8, team: 'Fluminense', player: 'Mario "Tricolor"', p: 3, w: 0, d: 1, l: 2, gf: 2, ga: 6, gd: -4, pts: 1 }
+                ]
+            }
+        };
+        
+        // Funções para renderizar as páginas
+        const pageRenderers = {
+            // Página inicial
+            home: () => {
+                return `
+                    <div class="fade-in">
+                        <!-- Banner Principal -->
+                        <div class="relative bg-primary rounded-lg overflow-hidden mb-8">
+                            <div class="relative z-10 p-8 md:p-12 text-white">
+                                <h1 class="text-3xl md:text-4xl font-bold mb-4">League Pro eFootball</h1>
+                                <p class="text-xl mb-6">O maior campeonato online de eFootball do Brasil</p>
+                                <div class="flex flex-wrap gap-4">
+                                    <a href="#" class="bg-white text-primary px-6 py-2 rounded-full font-medium hover:bg-opacity-90 transition-all" data-page="tournaments">
+                                        Ver Torneios
+                                    </a>
+                                    <a href="#" class="bg-transparent border-2 border-white text-white px-6 py-2 rounded-full font-medium hover:bg-white hover:text-primary transition-all" data-page="registration">
+                                        Inscreva-se
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-r from-primary to-transparent opacity-90">
+                                <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22%3E%3Cpath d=%22M14 16H9v-2h5V9h2v5h5v2h-5v5h-2v-5zm24 28V9h2v35h-2zM66 9v5h5v2h-5v5h-2v-5h-5v-2h5V9h2zm-24 28V9h2v28h-2zM38 31V9h2v22h-2zM14 31V9h2v22h-2zm-7-7V9h2v15H7zm45-15v22h-2V9h2zm8 0v35h-2V9h2zm15 0v28h-2V9h2z%22 fill=%22%23ffffff%22/%3E%3C/svg%3E');"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Torneios em Destaque -->
+                        <div class="mb-12">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-bold">Torneios em Destaque</h2>
+                                <a href="#" class="text-primary dark:text-primary hover:underline" data-page="tournaments">Ver todos</a>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                ${siteData.tournaments.slice(0, 3).map(tournament => `
+                                    <div class="bg-var(--color-card) border border-var(--color-card-border) rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                                        <div class="bg-primary p-4 text-white">
+                                            <h3 class="text-lg font-semibold">${tournament.name}</h3>
+                                            <div class="flex justify-between text-sm mt-1">
+                                                <span>${tournament.startDate}</span>
+                                                <span class="font-medium">${tournament.status}</span>
+                                            </div>
+                                        </div>
+                                        <div class="p-4">
+                                            <p class="mb-4">${tournament.description}</p>
+                                            <div class="flex justify-between text-sm mb-4">
+                                                <span>Vagas: ${tournament.registeredTeams}/${tournament.totalTeams}</span>
+                                                <span>Prêmio: ${tournament.prize}</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-sm ${tournament.isPaid ? 'text-accent' : 'text-green-600'}">
+                                                    ${tournament.isPaid ? `Inscrição: ${tournament.price}` : 'Inscrição: Gratuita'}
+                                                </span>
+                                                <a href="#" class="text-primary dark:text-primary font-medium hover:underline" data-tournament="${tournament.id}">Detalhes</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <!-- Notícias Recentes -->
+                        <div class="mb-12">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-bold">Notícias Recentes</h2>
+                                <a href="#" class="text-primary dark:text-primary hover:underline" data-page="news">Ver todas</a>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                ${siteData.news.map(news => `
+                                    <div class="bg-var(--color-card) border border-var(--color-card-border) rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                                        <div class="aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700">
+                                            <div class="p-6 flex items-center justify-center text-4xl">
+                                                ${news.image === 'tournament' ? '🏆' : news.image === 'players' ? '👥' : '📋'}
+                                            </div>
+                                        </div>
+                                        <div class="p-4">
+                                            <h3 class="text-lg font-semibold mb-2">${news.title}</h3>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">${news.date}</p>
+                                            <p class="text-sm mb-4">${news.summary}</p>
+                                            <a href="#" class="text-primary dark:text-primary hover:underline text-sm" data-news="${news.id}">Ler mais</a>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <!-- CTA - Inscreva-se -->
+                        <div class="bg-primary rounded-lg p-8 text-white text-center">
+                            <h2 class="text-2xl font-bold mb-4">Pronto para competir?</h2>
+                            <p class="mb-6 max-w-2xl mx-auto">Junte-se aos melhores jogadores de eFootball do Brasil e mostre suas habilidades em nossos torneios e ligas competitivas.</p>
+                            <div class="flex justify-center gap-4 flex-wrap">
+                                <a href="#" class="bg-white text-primary px-6 py-3 rounded-full font-medium hover:bg-opacity-90 transition-all" data-page="registration">
+                                    Inscreva-se Agora
+                                </a>
+                                <a href="#" class="bg-transparent border-2 border-white px-6 py-3 rounded-full font-medium hover:bg-white hover:text-primary transition-all" data-page="tournaments">
+                                    Explorar Torneios
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            // Página de torneios
+            tournaments: () => {
+                return `
+                    <div class="fade-in">
+                        <h1 class="text-3xl font-bold mb-6">Torneios</h1>
+                        
+                        <!-- Filtros de Torneios -->
+                        <div class="bg-var(--color-card) border border-var(--color-card-border) rounded-lg p-4 mb-6">
+                            <div class="flex flex-wrap gap-4">
+                                <div class="w-full md:w-auto">
+                                    <label class="block text-sm font-medium mb-1">Status</label>
+                                    <select class="w-full md:w-48 rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800">
+                                        <option value="all">Todos</option>
+                                        <option value="open">Inscrições Abertas</option>
+                                        <option value="ongoing">Em Andamento</option>
+                                        <option value="finished">Finalizados</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="w-full md:w-auto">
+                                    <label class="block text-sm font-medium mb-1">Tipo</label>
+                                    <select class="w-full md:w-48 rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800">
+                                        <option value="all">Todos</option>
+                                        <option value="free">Gratuitos</option>
+                                        <option value="paid">Pagos</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="w-full md:w-auto md:ml-auto self-end">
+                                    <button class="bg-primary text-white rounded px-4 py-2 hover:bg-opacity-90 transition-all">
+                                        <i class="fas fa-filter mr-1"></i> Filtrar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Lista de Torneios -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                            ${siteData.tournaments.map(tournament => `
+                                <div class="bg-var(--color-card) border border-var(--color-card-border) rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                                    <div class="bg-primary p-4 text-white">
+                                        <h3 class="text-xl font-semibold">${tournament.name}</h3>
+                                        <div class="flex justify-between text-sm mt-1">
+                                            <span>${tournament.startDate} - ${tournament.endDate}</span>
+                                            <span class="font-medium">${tournament.status}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="p-4">
+                                        <p class="mb-4">${tournament.description}</p>
+                                        
+                                        <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                                            <div>
+                                                <p><span class="font-medium">Vagas:</span> ${tournament.registeredTeams}/${tournament.totalTeams}</p>
+                                                <p><span class="font-medium">Prêmio:</span> ${tournament.prize}</p>
+                                            </div>
+                                            <div>
+                                                <p><span class="font-medium">Inscrição:</span> 
+                                                    <span class="${tournament.isPaid ? 'text-accent' : 'text-green-600'}">${tournament.price}</span>
+                                                </p>
+                                                <p><span class="font-medium">Duração:</span> ${getDaysBetween(tournament.startDate, tournament.endDate)} dias</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex justify-between items-center">
+                                            <a href="#" class="text-primary dark:text-primary hover:underline" data-tournament="${tournament.id}">
+                                                Ver tabela e detalhes
+                                            </a>
+                                            
+                                            <button class="bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition-all" data-tournament-register="${tournament.id}">
+                                                Inscrever-se
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <!-- Tabela de Classificação (Exemplo) -->
+                        <div class="bg-var(--color-card) border border-var(--color-card-border) rounded-lg overflow-hidden shadow-sm mb-8">
+                            <div class="bg-primary p-4 text-white">
+                                <h3 class="text-xl font-semibold">Copa Elite - Classificação</h3>
+                            </div>
+                            
+                            <div class="p-4 overflow-x-auto">
+                                <table class="w-full tournament-table">
+                                    <thead class="bg-gray-100 dark:bg-gray-800">
+                                        <tr>
+                                            <th>Pos</th>
+                                            <th>Time</th>
+                                            <th>Jogador</th>
+                                            <th>P</th>
+                                            <th>V</th>
+                                            <th>E</th>
+                                            <th>D</th>
+                                            <th>GP</th>
+                                            <th>GC</th>
+                                            <th>SG</th>
+                                            <th>Pts</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${siteData.tables.copaElite.map(row => `
+                                            <tr>
+                                                <td>${row.pos}</td>
+                                                <td>${row.team}</td>
+                                                <td>${row.player}</td>
+                                                <td>${row.p}</td>
+                                                <td>${row.w}</td>
+                                                <td>${row.d}</td>
+                                                <td>${row.l}</td>
+                                                <td>${row.gf}</td>
+                                                <td>${row.ga}</td>
+                                                <td>${row.gd}</td>
+                                                <td class="font-bold">${row.pts}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="p-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+                                <p class="text-sm"><span class="font-medium">Legenda:</span> P = Partidas, V = Vitórias, E = Empates, D = Derrotas, GP = Gols Pró, GC = Gols Contra, SG = Saldo de Gols, Pts = Pontos</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            // Página de seleção de times
+            teams: () => {
+                return `
+                    <div class="fade-in">
+                        <h1 class="text-3xl font-bold mb-6">Seleção de Times</h1>
+                        
+                        <!-- Formulário de Inscrição Simplificado -->
+                        <div class="bg-var(--color-card) border border-var(--color-card-border) rounded-lg p-6 mb-8">
+                            <h2 class="text-xl font-semibold mb-4">Escolha seu Time</h2>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Seu Nome</label>
+                                    <input type="text" class="w-full text-base rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800" placeholder="Digite seu nome completo">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Seu Nickname</label>
+                                    <input type="text" class="w-full text-base rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800" placeholder="Como deseja ser conhecido">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">E-mail</label>
+                                    <input type="email" class="w-full text-base rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800" placeholder="Seu e-mail">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">WhatsApp</label>
+                                    <input type="tel" class="w-full text-base rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800" placeholder="(00) 00000-0000">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Torneio</label>
+                                    <select class="w-full text-base rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800">
+                                        <option value="">Selecione um torneio</option>
+                                        ${siteData.tournaments.filter(t => t.status === 'Inscrições abertas').map(t => 
+                                            `<option value="${t.id}">${t.name} (${t.isPaid ? t.price : 'Gratuito'})</option>`
+                                        ).join('')}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Seleção de Times -->
+                        <div class="bg-var(--color-card) border border-var(--color-card-border) rounded-lg overflow-hidden mb-8">
+                            <div class="bg-primary p-4 text-white">
+                                <h2 class="text-xl font-semibold">Times Disponíveis</h2>
+                                <p class="text-sm mt-1">Selecione um time para o torneio</p>
+                            </div>
+                            
+                            <div class="p-4">
+                                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                    ${siteData.teams.map(team => `
+                                        <div class="relative">
+                                            <input type="radio" id="team-${team.id}" name="team" value="${team.id}" class="hidden peer" ${!team.available ? 'disabled' : ''}>
+                                            <label for="team-${team.id}" class="flex flex-col items-center justify-center p-4 border rounded-lg cursor-pointer transition-all
+                                                ${team.available ? 'border-gray-300 dark:border-gray-600 hover:border-primary dark:hover:border-primary peer-checked:border-primary dark:peer-checked:border-primary peer-checked:bg-primary/10' : 'opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800'}">
+                                                <div class="text-3xl mb-2">${team.logo}</div>
+                                                <span class="font-medium text-center">${team.name}</span>
+                                                ${!team.available ? '<span class="text-xs text-red-500">Indisponível</span>' : ''}
+                                            </label>
+                                            ${team.available ? '' : '<div class="absolute top-0 right-0 bg-red-500 text-white text-xs px-2 py-1 rounded-bl">Selecionado</div>'}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="p-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+                                <button class="bg-primary text-white px-6 py-2 rounded hover:bg-opacity-90 transition-all">
+                                    Confirmar Seleção
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            // Página de campeonatos pagos
+            paid: () => {
+                return `
+                    <div class="fade-in">
+                        <h1 class="text-3xl font-bold mb-6">Campeonatos Pagos</h1>
+                        
+                        <div class="bg-var(--color-card) border border-var(--color-card-border) rounded-lg overflow-hidden mb-8">
+                            <div class="p-6">
+                                <h2 class="text-xl font-semibold mb-4">Por que participar de campeonatos premium?</h2>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                    <div class="flex flex-col items-center text-center p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                                        <div class="text-3xl text-primary dark:text-primary mb-2">🏆</div>
+                                        <h3 class="font-semibold mb-2">Premiações Maiores</h3>
+                                        <p class="text-sm">Nossos campeonatos pagos oferecem premiações em dinheiro muito maiores que os gratuitos.</p>
+                                    </div>
+                                    
+                                    <div class="flex flex-col items-center text-center p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                                        <div class="text-3xl text-primary dark:text-primary mb-2">🎮</div>
+                                        <h3 class="font-semibold mb-2">Competição de Elite</h3>
+                                        <p class="text-sm">Enfrente jogadores mais competitivos e melhore suas habilidades em partidas de alto nível.</p>
+                                    </div>
+                                    
+                                    <div class="flex flex-col items-center text-center p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                                        <div class="text-3xl text-primary dark:text-primary mb-2">📺</div>
+                                        <h3 class="font-semibold mb-2">Transmissões ao Vivo</h3>
+                                        <p class="text-sm">Todos os jogos dos campeonatos pagos são transmitidos em nossos canais oficiais.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Campeonatos Pagos Disponíveis -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                            ${siteData.tournaments.filter(t => t.isPaid).map(tournament => `
+                                <div class="bg-var(--color-card) border border-var(--color-card-border) rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                                    <div class="bg-primary p-4 text-white">
+                                        <h3 class="text-xl font-semibold">${tournament.name}</h3>
+                                        <div class="flex justify-between text-sm mt-1">
+                                            <span>${tournament.startDate} - ${tournament.endDate}</span>
+                                            <span class="font-medium">${tournament.status}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="p-4">
+                                        <p class="mb-4">${tournament.description}</p>
+                                        
+                                        <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                                            <div>
+                                                <p><span class="font-medium">Vagas:</span> ${tournament.registeredTeams}/${tournament.totalTeams}</p>
+                                                <p><span class="font-medium">Prêmio:</span> ${tournament.prize}</p>
+                                            </div>
+                                            <div>
+                                                <p><span class="font-medium">Inscrição:</span> 
+                                                    <span class="text-accent font-medium">${tournament.price}</span>
+                                                </p>
+                                                <p><span class="font-medium">Duração:</span> ${getDaysBetween(tournament.startDate, tournament.endDate)} dias</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex justify-end">
+                                            <button class="bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition-all" data-tournament-payment="${tournament.id}">
+                                                Inscrever-se
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <!-- Modal de Pagamento (Inicialmente oculto) -->
+                        <div id="payment-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                            <div class="bg-white dark:bg-gray-900 rounded-lg w-full max-w-md">
+                                <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                                    <h3 class="text-lg font-semibold">Pagamento de Inscrição</h3>
+                                    <button id="close-payment-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="p-6">
+                                    <div class="mb-4">
+                                        <p class="mb-2">Para concluir sua inscrição no <span id="tournament-name" class="font-semibold">Copa Elite</span>, faça o pagamento usando o QR Code abaixo:</p>
+                                        <p class="text-primary dark:text-primary font-semibold mb-2">Valor: <span id="tournament-price">R$ 50,00</span></p>
+                                    </div>
+                                    
+                                    <div class="flex justify-center mb-6">
+                                        <div class="bg-white p-4 rounded-lg">
+                                            <!-- QR Code gerado programaticamente -->
+                                            <div id="qrcode-placeholder" class="w-48 h-48 mx-auto bg-gray-200 flex items-center justify-center">
+                                                <div class="text-center">
+                                                    <div class="grid grid-cols-5 grid-rows-5 gap-1 w-36 h-36 mx-auto">
+                                                        ${generateQRCode()}
+                                                    </div>
+                                                    <p class="mt-2 text-xs text-gray-600">QR Code PIX</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="space-y-3">
+                                        <p class="text-sm">Após o pagamento, envie o comprovante:</p>
+                                        <div class="flex items-center gap-2">
+                                            <i class="fab fa-whatsapp text-green-500 text-lg"></i>
+                                            <span>(11) 98765-4321</span>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Sua inscrição será confirmada em até 24 horas após a confirmação do pagamento.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-b-lg flex justify-end">
+                                    <button id="close-payment-button" class="bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition-all">
+                                        Fechar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            // Página de notícias
+            news: () => {
+                return `
+                    <div class="fade-in">
+                        <h1 class="text-3xl font-bold mb-6">Notícias e Atualizações</h1>
+                        
+                        <!-- Notícias em destaque -->
+                        <div class="grid grid-cols-1 gap-8 mb-12">
+                            ${siteData.news.map((news, index) => `
+                                <div class="bg-var(--color-card) border border-var(--color-card-border) rounded-lg overflow-hidden shadow-sm">
+                                    <div class="md:flex">
+                                        <div class="md:w-1/4 bg-gray-200 dark:bg-gray-700 flex items-center justify-center p-8">
+                                            <div class="text-6xl">
+                                                ${news.image === 'tournament' ? '🏆' : news.image === 'players' ? '👥' : '📋'}
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="md:w-3/4 p-6">
+                                            <div class="mb-4">
+                                                <h2 class="text-2xl font-bold mb-2">${news.title}</h2>
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">${news.date}</p>
+                                            </div>
+                                            
+                                            <div class="mb-4">
+                                                <p>${news.content}</p>
+                                            </div>
+                                            
+                                            <div class="flex justify-end">
+                                                <button class="text-primary dark:text-primary hover:underline" data-news-comments="${news.id}">
+                                                    Ver comentários (${Math.floor(Math.random() * 15)})
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <!-- Paginação -->
+                        <div class="flex justify-center my-8">
+                            <nav class="flex items-center space-x-2">
+                                <a href="#" class="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 text-primary dark:text-primary hover:bg-gray-100 dark:hover:bg-gray-800">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                                <a href="#" class="px-3 py-1 rounded bg-primary text-white">1</a>
+                                <a href="#" class="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800">2</a>
+                                <a href="#" class="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800">3</a>
+                                <span class="px-3 py-1">...</span>
+                                <a href="#" class="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800">8</a>
+                                <a href="#" class="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 text-primary dark:text-primary hover:bg-gray-100 dark:hover:bg-gray-800">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </nav>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            // Página de login/registro
+            login: () => {
+                return `
+                    <div class="max-w-md mx-auto fade-in">
+                        <h1 class="text-3xl font-bold mb-6 text-center">Acesse sua conta</h1>
+                        
+                        <div class="bg-var(--color-card) border border-var(--color-card-border) rounded-lg p-6 mb-6">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium mb-2">E-mail</label>
+                                <input type="email" class="w-full text-base rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800" placeholder="seu@email.com">
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium mb-2">Senha</label>
+                                <input type="password" class="w-full text-base rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800" placeholder="************">
+                                <div class="flex justify-end">
+                                    <a href="#" class="text-sm text-primary dark:text-primary hover:underline mt-1">Esqueceu a senha?</a>
+                                </div>
+                            </div>
+                            
+                            <button class="w-full bg-primary text-white py-2 rounded font-medium hover:bg-opacity-90 transition-all">
+                                Entrar
+                            </button>
+                            
+                            <div class="mt-4 text-center">
+                                <p>Não tem uma conta? <a href="#" class="text-primary dark:text-primary hover:underline" data-page="registration">Cadastre-se</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <a href="#" class="text-primary dark:text-primary hover:underline" data-page="home">
+                                <i class="fas fa-arrow-left mr-1"></i> Voltar para o início
+                            </a>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            // Página de registro
+            registration: () => {
+                return `
+                    <div class="max-w-lg mx-auto fade-in">
+                        <h1 class="text-3xl font-bold mb-6 text-center">Crie sua conta</h1>
+                        
+                        <div class="bg-var(--color-card) border border-var(--color-card-border) rounded-lg p-6 mb-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Nome Completo</label>
+                                    <input type="text" class="w-full text-base rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800" placeholder="Seu nome completo">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Nickname</label>
+                                    <input type="text" class="w-full text-base rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800" placeholder="Como quer ser chamado">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">E-mail</label>
+                                    <input type="email" class="w-full text-base rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800" placeholder="seu@email.com">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">WhatsApp</label>
+                                    <input type="tel" class="w-full text-base rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800" placeholder="(00) 00000-0000">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Senha</label>
+                                    <input type="password" class="w-full text-base rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800" placeholder="************">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Confirmar Senha</label>
+                                    <input type="password" class="w-full text-base rounded border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-800" placeholder="************">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded text-primary border-gray-300 dark:border-gray-600 mr-2">
+                                    <span class="text-sm">Concordo com os <a href="#" class="text-primary dark:text-primary hover:underline">Termos de Uso</a> e <a href="#" class="text-primary dark:text-primary hover:underline">Política de Privacidade</a></span>
+                                </label>
+                            </div>
+                            
+                            <button class="w-full bg-primary text-white py-3 rounded font-medium hover:bg-opacity-90 transition-all">
+                                Criar Conta
+                            </button>
+                            
+                            <div class="mt-4 text-center">
+                                <p>Já tem uma conta? <a href="#" class="text-primary dark:text-primary hover:underline" data-page="login">Faça login</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <a href="#" class="text-primary dark:text-primary hover:underline" data-page="home">
+                                <i class="fas fa-arrow-left mr-1"></i> Voltar para o início
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+        };
+        
+        // Função utilitária para calcular dias entre datas
+        function getDaysBetween(startDateStr, endDateStr) {
+            const parseDate = (dateStr) => {
+                const [day, month, year] = dateStr.split('/').map(Number);
+                return new Date(year, month - 1, day);
+            };
+            
+            const startDate = parseDate(startDateStr);
+            const endDate = parseDate(endDateStr);
+            const timeDiff = endDate.getTime() - startDate.getTime();
+            return Math.ceil(timeDiff / (1000 * 3600 * 24));
+        }
+        
+        // Função para gerar QR Code simples
+        function generateQRCode() {
+            // Gera um padrão simples para o QR code
+            const size = 5;
+            let html = '';
+            
+            // Bordas fixas
+            html += '<div class="bg-black"></div>'.repeat(7);
+            html += '<div class="bg-black"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-black"></div>';
+            html += '<div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div>';
+            html += '<div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div>';
+            html += '<div class="bg-black"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-black"></div>';
+            html += '<div class="bg-black"></div>'.repeat(5);
+            
+            // Padrão interno
+            for (let i = 0; i < 15; i++) {
+                if (Math.random() > 0.5) {
+                    html += '<div class="bg-black"></div>';
+                } else {
+                    html += '<div class="bg-white"></div>';
+                }
+            }
+            
+            // Adicionar padrão inferior esquerdo
+            html += '<div class="bg-black"></div>'.repeat(5);
+            html += '<div class="bg-black"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-black"></div>';
+            html += '<div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div>';
+            html += '<div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div><div class="bg-white"></div><div class="bg-black"></div>';
+            html += '<div class="bg-black"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-black"></div>';
+            
+            return html;
+        }
+        
+        // Inicialização da aplicação
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurações iniciais
+            setThemePreference();
+            
+            // Exibir página inicial por padrão
+            navigateToPage('home');
+            
+            // Configurar menus e toggles
+            setupEventListeners();
+        });
+        
+        // Configurar listeners de eventos
+        function setupEventListeners() {
+            // Toggle para o menu mobile
+            document.getElementById('menu-toggle').addEventListener('click', function() {
+                const mobileMenu = document.getElementById('mobile-menu');
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Toggle para o tema escuro/claro
+            document.getElementById('theme-toggle').addEventListener('click', toggleDarkMode);
+            
+            // Delegação de eventos para links de navegação
+            document.addEventListener('click', function(e) {
+                // Links de navegação
+                if (e.target.matches('[data-page]') || e.target.closest('[data-page]')) {
+                    e.preventDefault();
+                    const target = e.target.matches('[data-page]') ? e.target : e.target.closest('[data-page]');
+                    const page = target.getAttribute('data-page');
+                    navigateToPage(page);
+                    
+                    // Fechar menu mobile ao navegar (em dispositivos móveis)
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (window.innerWidth < 1024 && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+                
+                // Botões de inscrição com pagamento
+                if (e.target.matches('[data-tournament-payment]') || e.target.closest('[data-tournament-payment]')) {
+                    e.preventDefault();
+                    const tournamentId = e.target.getAttribute('data-tournament-payment') || 
+                                        e.target.closest('[data-tournament-payment]').getAttribute('data-tournament-payment');
+                    showPaymentModal(tournamentId);
+                }
+                
+                // Fechar modal de pagamento
+                if (e.target.matches('#close-payment-modal, #close-payment-button') || 
+                    e.target.closest('#close-payment-modal, #close-payment-button')) {
+                    e.preventDefault();
+                    hidePaymentModal();
+                }
+            });
+        }
+        
+        // Navegação entre páginas
+        function navigateToPage(page) {
+            // Mostrar indicador de carregamento
+            const loadingBar = document.getElementById('loading-bar');
+            loadingBar.classList.remove('hidden');
+            
+            // Curto timeout para simular carregamento
+            setTimeout(() => {
+                // Renderizar o conteúdo da página
+                const pageContent = document.getElementById('page-content');
+                
+                if (pageRenderers[page]) {
+                    pageContent.innerHTML = pageRenderers[page]();
+                    
+                    // Atualizar classe ativa no menu de navegação
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        const linkPage = link.getAttribute('data-page');
+                        if (linkPage === page) {
+                            link.classList.add('text-primary', 'dark:text-primary', 'font-semibold');
+                        } else {
+                            link.classList.remove('text-primary', 'dark:text-primary', 'font-semibold');
+                        }
+                    });
+                    
+                    // Rolar para o topo da página
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    pageContent.innerHTML = `<div class="text-center py-12">
+                        <h2 class="text-2xl font-bold mb-4">Página em Construção</h2>
+                        <p>Desculpe, esta página ainda está sendo desenvolvida.</p>
+                        <a href="#" class="inline-block mt-4 text-primary dark:text-primary hover:underline" data-page="home">
+                            <i class="fas fa-arrow-left mr-1"></i> Voltar para o início
+                        </a>
+                    </div>`;
+                }
+                
+                // Esconder indicador de carregamento
+                loadingBar.classList.add('hidden');
+            }, 300);
+        }
+        
+        // Exibir modal de pagamento
+        function showPaymentModal(tournamentId) {
+            const tournament = siteData.tournaments.find(t => t.id == tournamentId);
+            if (tournament) {
+                // Atualizar detalhes do torneio no modal
+                document.getElementById('tournament-name').textContent = tournament.name;
+                document.getElementById('tournament-price').textContent = tournament.price;
+                
+                // Exibir o modal
+                const paymentModal = document.getElementById('payment-modal');
+                paymentModal.classList.remove('hidden');
+            }
+        }
+        
+        // Esconder modal de pagamento
+        function hidePaymentModal() {
+            const paymentModal = document.getElementById('payment-modal');
+            paymentModal.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
